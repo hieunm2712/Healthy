@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Giữ Dáng Cho Thanh Xuân</title>
+<link href="https://fonts.googleapis.com/css2=family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fff3f5;
+    --card: #ffffff;
+    --border: #ffd3dc;
+    --accent: #ff5c8a;
+    --accent2: #ffb3c6;
+    --text: #4a4a4a;
+    --muted: #9c9c9c;
+    --special: #fff0f2;
+    --special-accent: #ff4071;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Comfortaa', cursive, sans-serif;
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+  }
+
+  /* --- CẬP NHẬT HEADER ĐỐI XỨNG --- */
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px dashed var(--border);
+  }
+
+  .header-side-photo {
+    flex: 0 0 70px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; /* Ảnh tròn gọn gàng 2 bên */
+    border: 2px solid white;
+    box-shadow: 0 3px 6px rgba(255, 179, 198, 0.4);
+    overflow: hidden;
+  }
+
+  @media (min-width: 480px) {
+    .header-side-photo {
+      flex: 0 0 90px;
+      width: 90px;
+      height: 90px;
+    }
+  }
+
+  .header-side-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .header-text {
+    flex: 1;
+    text-align: center;
+  }
+
+  .header-text h1 {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    color: var(--accent);
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  .header-text p {
+    color: var(--muted);
+    font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .tip-bar {
+    background: linear-gradient(135deg, #fff9fa, #fff0f3);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 24px;
+    font-size: 0.82rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  .tip-bar strong { color: var(--accent); }
+
+  .days-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(255, 179, 198, 0.15);
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .day-badge {
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: var(--accent);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    min-width: 45px;
+    text-align: center;
+  }
+
+  .day-title { flex: 1; }
+  .day-title h2 { font-size: 1.05rem; color: #333; font-weight: 700; }
+  .day-title .sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .day-meta { font-size: 0.75rem; color: var(--accent); font-weight: 700; }
+  .chevron { color: var(--accent2); font-size: 0.8rem; transition: transform 0.3s; }
+  
+  .day-card.open .chevron { transform: rotate(180deg); }
+  .day-body { display: none; padding: 0 16px 16px; border-top: 1px dashed var(--border); }
+  .day-card.open .day-body { display: block; }
+
+  .pre-note {
+    background: #fffafa;
+    border-left: 3px solid var(--accent2);
+    padding: 8px 12px;
+    margin: 12px 0;
+    font-size: 0.78rem;
+    color: #666;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .exercise-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  
+  .exercise {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: start;
+    padding: 12px;
+    background: #fff9fa;
+    border-radius: 12px;
+    border: 1px solid #ffeef1;
+  }
+
+  .ex-name { font-size: 0.88rem; font-weight: 700; color: #444; }
+  .ex-note { font-size: 0.78rem; color: #666; margin-top: 4px; line-height: 1.4; }
+  
+  .ex-sets {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: #fff;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .special-card .day-header { background: var(--special); }
+  .special-card .day-badge { background: var(--special-accent); }
+
+  .tag { display: inline-block; font-size: 0.65rem; padding: 2px 6px; border-radius: 20px; margin-left: 6px; font-weight: 700; }
+  .tag-work { background: #e3f2fd; color: #1565c0; }
+  .tag-out { background: #fff3e0; color: #ef6c00; }
+  .tag-sport { background: #e8f5e9; color: #2e7d32; }
+  .tag-reward { background: #f3e5f5; color: #6a1b9a; }
+
+  .bottom-note {
+    margin-top: 24px;
+    background: #ffffff;
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 16px;
+  }
+  .bottom-note h3 { font-size: 1rem; color: var(--accent); margin-bottom: 12px; text-align: center; }
+  .note-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 600px) { .note-grid { grid-template-columns: 1fr 1fr; } }
+  
+  .note-item {
+    background: #fff9fa;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 0.78rem;
+    color: #555;
+    line-height: 1.4;
+    border: 1px solid #ffe4e7;
+  }
+  .note-item strong { color: var(--accent); display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- COMPONENT HEADER MỚI -->
+<div class="header-container">
+  <!-- Ảnh trái -->
+  <div class="header-side-photo">
+    <img src="./img/cute.jpg" alt="Xuân Trái">
+  </div>
+  
+  <!-- Cụm chữ chính giữa -->
+  <div class="header-text">
+    <h1>Menu Giữ Dáng Cho Đặng Thanh Xuân</h1>
+    <p>Đồng hành cùng Thanh Xuân bởi Minh Hiếu • Nhẹ nhàng, thon gọn, ngập tràn yêu thương 💕</p>
+  </div>
+  
+  <!-- Ảnh phải -->
+  <div class="header-side-photo">
+    <img src="./img/beauty.jpg" alt="Xuân Phải">
+  </div>
+</div>
+
+<div class="tip-bar">
+  🚨 <strong>Góc nhắc nhở yêu thương:</strong> Trà sữa ngọt ngào và xiên bẩn đậm vị rất dễ làm tích mỡ bụng dưới nha Xuân ơi! Anh đã thiết kế các cữ "thưởng" trà sữa và nước dừa hợp lý trong tuần để Xuân vừa thỏa mãn cơn thèm, vừa giữ được form dáng thon gọn nè!
+</div>
+
+<div class="days-grid">
+
+  <!-- THỨ 2 -->
+  <div class="day-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">T2</div>
+      <div class="day-title">
+        <h2>NGÀY ĐẦU TUẦN BẬN RỘN</h2>
+        <div class="sub">Văn phòng • Tối đi dạy về muộn</div>
+      </div>
+      <div class="day-meta">Thưởng Nước Dừa</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="pre-note">🥤 Cuối ngày đi dạy mệt, Xuân được thưởng 1 cốc nước dừa trân châu giải nhiệt nhé!</div>
+      <div class="exercise-list">
+        <div class="exercise">
+          <div><div class="ex-name">🍞 Bữa Sáng <span class="tag tag-work">Mang đi</span></div><div class="ex-note">2 lát bánh mì gối + 1 hộp sữa tươi ít đường. Cầm lên công ty ăn siêu nhanh gọn.</div></div>
+          <div class="ex-sets">Tiện lợi</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍱 Bữa Trưa <span class="tag tag-work">Hộp cơm</span></div><div class="ex-note">Cơm hộp mang đi: 1 bát con cơm + Thịt bò xào mướp đắng hoặc giá đỗ + Nhiều rau xanh.</div></div>
+          <div class="ex-sets">1 Bát cơm</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍜 Bữa Tối <span class="tag tag-out">Ăn ngoài</span></div><div class="ex-note">Dạy về muộn: Ăn 1 bát phở bò hoặc bún dọc mùng (nước trong, ít bánh, nhiều rau). Tránh xiên bẩn nha!</div></div>
+          <div class="ex-sets">1 Bát vừa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THỨ 3 -->
+  <div class="day-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">T3</div>
+      <div class="day-title">
+        <h2>CƠM NHÀ ẤM ÁP</h2>
+        <div class="sub">Văn phòng • Tối ăn cùng gia đình</div>
+      </div>
+      <div class="day-meta">Nhiều Rau</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="pre-note">💡 Quy tắc ăn cơm nhà: Ăn rau trước → thức ăn → cơm sau cùng để tránh bị quá no.</div>
+      <div class="exercise-list">
+        <div class="exercise">
+          <div><div class="ex-name">🥣 Bữa Sáng <span class="tag tag-work">Mang đi</span></div><div class="ex-note">1 hộp sữa chua + 1 quả chuối chín. Trộn ăn tại bàn làm việc, vừa gọn vừa đẹp da.</div></div>
+          <div class="ex-sets">1 Cữ</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍱 Bữa Trưa <span class="tag tag-work">Hộp cơm</span></div><div class="ex-note">Cơm hộp mang đi: 1 bát con cơm + Thịt lợn nạc rang nghệ/cháy cạnh + Rau cải luộc.</div></div>
+          <div class="ex-sets">1 Bát cơm</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍚 Bữa Tối</div><div class="ex-note">Ăn cơm gia đình: 1 bát con cơm + Thịt bò kho hoặc xào + 1 đĩa rau muống luộc (uống nước canh chanh).</div></div>
+          <div class="ex-sets">Nhiều rau</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THỨ 4 -->
+  <div class="day-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">T4</div>
+      <div class="day-title">
+        <h2>NGÀY CẦU LÔNG NĂNG ĐỘNG</h2>
+        <div class="sub">Văn phòng • Tối đánh cầu lông mệt</div>
+      </div>
+      <div class="day-meta">Bù Năng Lượng</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="pre-note">🏸 Tối nay đánh cầu mệt, Xuân cần ăn đủ để hồi phục và có thêm 1 cốc nước dừa trân châu nhé!</div>
+      <div class="exercise-list">
+        <div class="exercise">
+          <div><div class="ex-name">🍠 Bữa Sáng <span class="tag tag-work">Mang đi</span></div><div class="ex-note">1 củ khoai lang luộc cỡ vừa (chuẩn bị từ tối trước) + 1 hộp sữa hạt.</div></div>
+          <div class="ex-sets">1 Củ</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍱 Bữa Trưa <span class="tag tag-work">Hộp cơm</span></div><div class="ex-note">Cơm hộp mang đi: 1 bát con cơm + Ức gà xào nấm/sả ớt + Bắp cải luộc.</div></div>
+          <div class="ex-sets">1 Bát cơm</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🥩 Bữa Tối <span class="tag tag-sport">Sau tập</span></div><div class="ex-note">Bổ sung năng lượng: 1 bát con cơm đầy + Thịt bò xào hành tây (hoặc sốt tiêu) + 1 bát canh rau lớn.</div></div>
+          <div class="ex-sets">Tăng đạm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THỨ 5 -->
+  <div class="day-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">T5</div>
+      <div class="day-title">
+        <h2>BỒI BỔ GIỮA TUẦN</h2>
+        <div class="sub">Văn phòng • Món ngon yêu thích</div>
+      </div>
+      <div class="day-meta">Menu Ngon miệng</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="pre-note">💡 Không khắt khe! Hôm nay nhà mình ăn món ngon để đổi vị nha Xuân.</div>
+      <div class="exercise-list">
+        <div class="exercise">
+          <div><div class="ex-name">🥪 Bữa Sáng <span class="tag tag-work">Mang đi</span></div><div class="ex-note">Sandwich kẹp 1 quả trứng ốp + xà lách. Gói màng bọc thực phẩm mang lên cty ăn sáng.</div></div>
+          <div class="ex-sets">1 Chiếc</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍱 Bữa Trưa <span class="tag tag-work">Hộp cơm</span></div><div class="ex-note">Cơm hộp mang đi: 1 bát con cơm + Đậu phụ nhồi thịt sốt cà chua + Rau cải cúc luộc.</div></div>
+          <div class="ex-sets">1 Bát cơm</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍲 Bữa Tối <span class="tag tag-reward">Bồi bổ</span></div><div class="ex-note">Ăn cơm nhà nâng cấp: Canh sườn non nấu bí đao + Thịt bò trần hành chần + Rau sống/rau luộc ăn thoải mái.</div></div>
+          <div class="ex-sets">Ngon miệng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THỨ 6 -->
+  <div class="day-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">T6</div>
+      <div class="day-title">
+        <h2>CUỐI TUẦN THOẢI MÁI</h2>
+        <div class="sub">Văn phòng • Tối đi dạy về muộn</div>
+      </div>
+      <div class="day-meta">Thưởng Nước Dừa</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="pre-note">🥤 Hoàn thành tuần làm việc! Thưởng 1 cốc nước dừa trân châu mát lạnh sau giờ dạy mệt mỏi.</div>
+      <div class="exercise-list">
+        <div class="exercise">
+          <div><div class="ex-name">🥣 Bữa Sáng <span class="tag tag-work">Mang đi</span></div><div class="ex-note">Nhanh gọn: 1 hộp sữa uống lên men hoặc sữa tươi + 1 gói hạt ngũ cốc nhỏ.</div></div>
+          <div class="ex-sets">Nhanh</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍱 Bữa Trưa <span class="tag tag-work">Hộp cơm</span></div><div class="ex-note">Cơm hộp ngày cuối tuần: 1 bát cơm + Thịt vịt/gà luộc bỏ da + Canh rau ngót.</div></div>
+          <div class="ex-sets">1 Bát cơm</div>
+        </div>
+        <div class="exercise">
+          <div><div class="ex-name">🍲 Bữa Tối <span class="tag tag-out">Ăn ngoài</span></div><div class="ex-note">Ăn tiệm sau giờ dạy: 1 bát miến gà hoặc cháo sườn sụn ấm bụng. Nhớ kiềm chế với xiên bẩn và trà sữa nha Xuân!</div></div>
+          <div class="ex-sets">Dễ tiêu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THỨ 7 -->
+  <div class="day-card special-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">T7</div>
+      <div class="day-title">
+        <h2>XẢ HƠI THỂ THAO</h2>
+        <div class="sub">Cuối tuần vận động nhiều • Cầu lông + Bơi</div>
+      </div>
+      <div class="day-meta" style="color: var(--special-accent)">Thưởng Trà Sữa 🧋</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body" style="border-top-color: var(--border);">
+      <div style="padding-top:12px; font-size:0.85rem; color:#555; line-height:1.7;">
+        💪 <strong>Năng lượng ngày thể thao:</strong> Hôm nay Xuân vận động rất nhiều (đánh cầu + bơi) nên cơ thể tiêu hao cực lớn. Cần ăn uống đầy đủ cơm nhà để không bị mệt.<br>
+        🧋 <strong>Phần thưởng xứng đáng:</strong> Xuân có thể uống 1 cốc trà sữa full topping để bù năng lượng và cho đã cơn thèm (chọn giảm đường để ngon mà vẫn tốt cho vòng eo nhé!).
+      </div>
+    </div>
+  </div>
+
+  <!-- CHỦ NHẬT -->
+  <div class="day-card special-card" onclick="toggle(this)">
+    <div class="day-header">
+      <div class="day-badge">CN</div>
+      <div class="day-title">
+        <h2>DATE NIGHT CÙNG ZAI 💕</h2>
+        <div class="sub">Ngày ngọt ngào • Hẹn hò tự do</div>
+      </div>
+      <div class="day-meta" style="color: var(--special-accent)">Dating Đậm Đà 🧋</div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="day-body" style="border-top-color: var(--border);">
+      <div style="padding-top:12px; font-size:0.85rem; color:#555; line-height:1.7;">
+        🍳 <strong>Sáng & Trưa:</strong> Ăn cơm nhà thanh đạm, nhiều rau luộc và thịt nạc để "dành bụng" cho buổi tối.<br>
+        👩‍❤️‍👨 <strong>Tối Hẹn Hò (Date Night):</strong> Không healthy, không ăn kiêng! Xuân cứ thoải mái ăn món hai đứa thích (đồ nướng, lẩu, đồ Thái...), uống 1 cốc trà sữa và tận hưởng buổi tối trọn vẹn niềm vui cùng Hiếu nhé!
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-note">
+  <h3>🌸 CẨM NANG GIỮ DÁNG REBOUND CHO XUÂN</h3>
+  <div class="note-grid">
+    <div class="note-item"><strong>🧋 Chiến thuật Trà sữa</strong>Không cần bỏ hẳn! Cuối tuần (T7, CN) được uống thoải mái. Ngày thường thèm quá thì đổi sang nước dừa trân châu hoặc trà hoa quả ít đường nha.</div>
+    <div class="note-item"><strong>🍢 Tạm biệt Xiên bẩn</strong>Xiên bẩn chứa nhiều dầu mỡ chiên đi chiên lại và gia vị đậm, rất dễ gây giữ nước làm bụng bị đầy và tích mỡ. Thay bằng hoa quả cắt miếng nha Xuân.</div>
+    <div class="note-item"><strong>🥩 Ưu tiên Thịt bò & Rau</strong>Xuân thích ăn rau và bò là một lợi thế lớn! Thịt bò giàu protein giúp săn cơ, rau xanh giúp no lâu và đẹp da. Thỏa sức sáng tạo các món xào/luộc.</div>
+    <div class="note-item"><strong>✨ Mục tiêu thon gọn</strong>Chúng mình hướng tới một cơ thể khỏe mạnh, tràn đầy sức sống và thon gọn tự nhiên, tuyệt đối không ép cân gầy gộc, mệt mỏi! Đẹp đôi theo đúng nghĩa đen và nghĩa bóng nhé!!!</div>
+  </div>
+</div>
+
+<script>
+  function toggle(card) {
+    card.classList.toggle('open');
+  }
+  document.querySelector('.day-card').classList.add('open');
+</script>
+</body>
+</html>
